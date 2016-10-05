@@ -19,35 +19,8 @@ import jp.iforcom.bs.response.ResponsePut.Info;
 public class DataService {
 
     /**
-     * パス：/hello
+     * 今回修正していくAPI
      *
-     * @return "Hello World"
-     */
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    @Path("/hello")
-    public String sayHello() {
-        return "Hello World";
-    }
-
-    /**
-     * パス：/{認証ID}/{インフォメーションID}
-     *
-     * @param authId 認証ID
-     * @param infoId インフォメーションID
-     * @return "authId=" + 認証ID + ", infoId=" + インフォメーションID + " ですね？"
-     */
-    @GET
-    @Produces({MediaType.TEXT_PLAIN + ";charset=UTF-8"})
-    @Path("/{authId}/{infoId}")
-    public String getTest(
-            @PathParam("authId") String authId,
-            @PathParam("infoId") String infoId) {
-
-        return "authId=" + authId + ", infoId=" + infoId + " ですね？";
-    }
-
-    /**
      * パス：/{認証ID}/{インフォメーションID}
      *
      * @param authId 認証ID
@@ -71,10 +44,34 @@ public class DataService {
 
         try {
 
-            System.out.println(authId);
-            System.out.println(infoId);
+            //--------------------------------------------------------------------------------
+            //【八木くん】ここから
+            //①暗号化されたユーザID＋パスワードが、authIdに入ってくるので、
+            //　復号化して、ユーザID、パスワードに分ける。
+            String userId = "";
+            String password = "";
+
+
+
+
+            //【八木くん】ここまで
+            //--------------------------------------------------------------------------------
+            //【池本さん】ここから
+            //①作成したDBアクセスクラスのインスタンスを作成する。
+            //②ユーザID、パスワードをもとに、ユーザ情報チェックメソッドを呼ぶ。
+            //③ユーザID、インフォメーションIDをもとに、データ蓄積情報登録メソッドを呼ぶ。
+            userId = "aaa";
+            password = "bbb";
+
+
+
+
+
+            //【池本さん】ここまで
+            //--------------------------------------------------------------------------------
 
             //デバッグ情報
+            //デバッグを出したい時に追記する
             StringBuffer sb = new StringBuffer();
             sb.append("authId=" + authId);
             sb.append(", infoId=" + infoId);
@@ -96,6 +93,39 @@ public class DataService {
         return Response.ok(response,
                 MediaType.APPLICATION_JSON).build();
 
+    }
+
+    /**
+     * テスト用API
+     *
+     * パス：/hello
+     *
+     * @return "Hello World"
+     */
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/hello")
+    public String sayHello() {
+        return "Hello World";
+    }
+
+    /**
+     * テスト用API
+     *
+     * パス：/{認証ID}/{インフォメーションID}
+     *
+     * @param authId 認証ID
+     * @param infoId インフォメーションID
+     * @return "authId=" + 認証ID + ", infoId=" + インフォメーションID + " ですね？"
+     */
+    @GET
+    @Produces({MediaType.TEXT_PLAIN + ";charset=UTF-8"})
+    @Path("/{authId}/{infoId}")
+    public String getTest(
+            @PathParam("authId") String authId,
+            @PathParam("infoId") String infoId) {
+
+        return "authId=" + authId + ", infoId=" + infoId + " ですね？";
     }
 
 }
