@@ -11,6 +11,7 @@ import javax.ws.rs.core.Response;
 
 import jp.iforcom.bs.response.ResponsePut;
 import jp.iforcom.bs.response.ResponsePut.Info;
+import java.sql.ResultSet;
 
 /**
  * パス：ルート
@@ -57,16 +58,22 @@ public class DataService {
             //【八木くん】ここまで
             //--------------------------------------------------------------------------------
             //【池本さん】ここから
+            userId = "ike";
+            password = "ike";
+            
             //①作成したDBアクセスクラスのインスタンスを作成する。
+            DBAccess dba = new DBAccess();
+
             //②ユーザID、パスワードをもとに、ユーザ情報チェックメソッドを呼ぶ。
-            //③ユーザID、インフォメーションIDをもとに、データ蓄積情報登録メソッドを呼ぶ。
-            userId = "aaa";
-            password = "bbb";
+            if (!dba.GetUserInfo(userId, password))
+            {
+            	// 存在しない
+            } else {
+                //③ユーザID、インフォメーションIDをもとに、データ蓄積情報登録メソッドを呼ぶ。
+                dba.UpdateDataInfo(userId, infoId, requestBody);
+            }
 
-
-
-
-
+            
             //【池本さん】ここまで
             //--------------------------------------------------------------------------------
 
