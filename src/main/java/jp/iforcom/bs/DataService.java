@@ -11,7 +11,6 @@ import javax.ws.rs.core.Response;
 
 import jp.iforcom.bs.response.ResponsePut;
 import jp.iforcom.bs.response.ResponsePut.Info;
-import java.sql.ResultSet;
 
 /**
  * パス：ルート

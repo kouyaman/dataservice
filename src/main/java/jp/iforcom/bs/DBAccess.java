@@ -4,6 +4,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 public class DBAccess {
 
@@ -112,6 +114,7 @@ public class DBAccess {
 	public boolean AddUserInfo(String userId, String password)
 	{
 		PreparedStatement ps = null;
+		
         String sql = "INSERT INTO UserInfo(UserId, Password, UserName) VALUES('" + userId + "', '" + password + "')";		
 		
         try
@@ -194,14 +197,16 @@ public class DBAccess {
 		try
         {
         	GetConnection();
-		
+        	Date updateDate = new Date();
+        	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        	
 			if (!GetDataInfo(userId, keyId))
 			{
-				sql = "INSERT INTO DataInfo(UserId, KeyId, Data) VALUES('" + userId + "', '" + keyId + "', '" + data + "')";
+				sql = "INSERT INTO DataInfo(UserId, KeyId, Data, UpdateDate) VALUES('" + userId + "', '" + keyId + "', '" + data + "', '" + sdf.format(updateDate) + "')";
 			}
 			else
 			{
-				sql = "UPDATE DataInfo SET Data = '" + data + "' WHERE UserId = '" + userId + "' AND KeyId = '" + keyId + "'";
+				sql = "UPDATE DataInfo SET Data = '" + data + "', UpdateDate = '" + sdf.format(updateDate) + "' WHERE UserId = '" + userId + "' AND KeyId = '" + keyId + "'";
 			}
         	
 	        // ステートメントオブジェクトを生成
