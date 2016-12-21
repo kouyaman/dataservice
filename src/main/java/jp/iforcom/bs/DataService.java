@@ -52,7 +52,6 @@ public class DataService {
             //①暗号化されたユーザID＋パスワードが、authIdに入ってくるので、
             //　復号化して、ユーザID、パスワードに分ける。
             //　例：ユーザID="ike"、パスワード="ike"→"lCnf0zR21Z-nuXbq2xqQxA.."
-            authId = "lCnf0zR21Z-nuXbq2xqQxA..";
 
             String decResult = Decription.execute(authId);
             String[] div = decResult.split("\t");
@@ -66,15 +65,12 @@ public class DataService {
             //【八木くん】ここまで
             //--------------------------------------------------------------------------------
             //【池本さん】ここから
-//            userId = "ike";
-//            password = "ike";
 
             //①作成したDBアクセスクラスのインスタンスを作成する。
             DBAccess dba = new DBAccess();
 
             //②ユーザID、パスワードをもとに、ユーザ情報チェックメソッドを呼ぶ。
-            if (!dba.GetUserInfo(userId, password))
-            {
+            if (!dba.GetUserInfo(userId, password)) {
                 // 存在しない
             } else {
                 //③ユーザID、インフォメーションIDをもとに、データ蓄積情報登録メソッドを呼ぶ。
