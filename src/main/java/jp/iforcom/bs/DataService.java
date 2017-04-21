@@ -1,5 +1,7 @@
 package jp.iforcom.bs;
 
+import java.net.URL;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -9,6 +11,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 import jp.iforcom.bs.response.ResponsePut;
 import jp.iforcom.bs.response.ResponsePut.Info;
@@ -20,6 +25,8 @@ import jp.iforcom.bs.util.Encryption;
  */
 @Path("/")
 public class DataService {
+
+    private Logger logger = Logger.getLogger(DataService.class);
 
     /**
      * 今回修正していくAPI
@@ -39,6 +46,13 @@ public class DataService {
             @PathParam("authId") String authId,
             @PathParam("infoId") String infoId,
             String requestBody) {
+
+        // 設定ファイルを読み込む
+        ClassLoader cl = this.getClass().getClassLoader();
+        URL url = cl.getResource("log4j.properties");
+        PropertyConfigurator.configure(url);
+
+        logger.debug("AAAAA");
 
         //レスポンスデータ
         ResponsePut response = new ResponsePut();
@@ -97,7 +111,7 @@ public class DataService {
             //TODO
             //DBエラー等の場合、ここでエラー内容を返す
             response.setInfo(null);
-            response.setError("エラーコード", "エラーメッセージ");
+            response.setError(e.getMessage(), e.getStackTrace().toString());
         }
 
         //レスポンス返却
