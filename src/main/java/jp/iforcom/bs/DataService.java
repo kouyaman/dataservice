@@ -183,23 +183,55 @@ public class DataService {
         return "Hello World";
     }
 
+
+
     /**
-     * テスト用API
+     * データ返却API
      *
-     * パス：/{認証ID}/{インフォメーションID}
+     * パス：/{ユーザーID}/{キーID}
      *
-     * @param authId 認証ID
-     * @param infoId インフォメーションID
-     * @return "authId=" + 認証ID + ", infoId=" + インフォメーションID + " ですね？"
+     * @param userId ユーザーID
+     * @param keyId キーID
+     * @return
      */
     @GET
     @Produces({MediaType.TEXT_PLAIN + ";charset=UTF-8"})
-    @Path("/{authId}/{infoId}")
-    public String getTest(
-            @PathParam("authId") String authId,
-            @PathParam("infoId") String infoId) {
+    @Path("/{userId}/{keyId}")
+    public Response getTest(
+            @PathParam("userId") String userId,
+            @PathParam("keyId") String keyId) {
 
-        return "authId=" + authId + ", infoId=" + infoId + " ですね？";
+        // 設定ファイルを読み込む
+        ClassLoader cl = this.getClass().getClassLoader();
+        URL url = cl.getResource("log4j.properties");
+        PropertyConfigurator.configure(url);
+
+        //レスポンスデータ
+        ResponsePut response = new ResponsePut();
+        //レスポンスデータ（返却情報）
+        Info info = new ResponsePut.Info();
+
+        try {
+            //データ出力
+            System.out.println("ユーザーID：" + userId);
+            System.out.println("キーID：" + keyId);
+
+            //①作成したDBアクセスクラスのインスタンスを作成する。
+            DBAccess dba = new DBAccess();
+
+            //②ユーザID、パスワードをもとに、ユーザ情報チェックメソッドを呼ぶ。
+            response = dba.GetData(userId, keyId);
+        } catch (Exception e) {
+
+            //TODO
+            //DBエラー等の場合、ここでエラー内容を返す
+            response.setInfo(null);
+            response.setError(e.getMessage(), e.getStackTrace().toString());
+        }
+
+        //レスポンス返却
+        return Response.ok(response,
+                MediaType.APPLICATION_JSON).build();
     }
 
 }

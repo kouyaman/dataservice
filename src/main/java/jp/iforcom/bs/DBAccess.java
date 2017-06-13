@@ -5,7 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+
+import jp.iforcom.bs.response.ResponsePut;
+import jp.iforcom.bs.response.ResponsePut.Info;
 
 public class DBAccess {
 
@@ -324,4 +328,62 @@ public class DBAccess {
         }
     }
 
+    /**
+     * データ取得
+     * @param userId
+     * @param keyId
+     * @return ResponsePut
+     */
+    public ResponsePut GetData(String userId, String keyId)
+    {
+        PreparedStatement ps = null;
+        String sql = "SELECT UserId, KeyId, Data, UpdateDate FROM DataInfo WHERE UserId = '" + userId + "' AND KeyId LIKE '%" + keyId + "%' ORDER BY UserId, KeyId, UpdateDate";
+
+        ResponsePut response = new ResponsePut();
+        Info info = new ResponsePut.Info();
+        ArrayList list = new ArrayList();
+
+        try
+        {
+            GetConnection();
+
+
+            // ステートメントオブジェクトを生成
+            ps = _con.prepareStatement(sql);
+
+            // クエリーを実行して結果セットを取得
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String key = rs.getString("KeyId");
+                String user = rs.getString("UserId");
+                String data = rs.getString("Data");
+                Date updateDate = rs.getDate("UpdateDate");
+                list.add("\n\"userId\":\"" + user + "\",\n"
+                        + "\"keyId\":\"" + key + "\",\n"
+                        + "\"updateDate\":\"" + updateDate + "\",\n"
+                        + data);
+            }
+            info.setResultList(list);
+            response.setInfo(info);
+            return response;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        finally {
+            try {
+                // close処理
+                if(ps != null) {
+                    ps.close();
+                }
+                // close処理
+                if(_con != null) {
+                    _con.close();
+                }
+            } catch(SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
